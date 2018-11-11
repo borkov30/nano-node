@@ -33,6 +33,18 @@ echo $@ > settings
 
 echo "${bold}NANO Node Docker ${version}${reset}"
 
+# SET BASH ALIASES FOR NODE CLI
+if [ -f ~/.bash_aliases ]; then
+    alias=$(cat ~/.bash_aliases | grep 'rai-beta');
+    if [[ ! $alias ]]; then
+        echo "alias rai-beta='docker exec -it nano-beta-node /usr/bin/rai_node'" >> ~/.bash_aliases;
+        source ~/.bashrc;
+    fi
+else
+    echo "alias rai-beta='docker exec -it nano-beta-node /usr/bin/rai_node'" >> ~/.bash_aliases;
+    source ~/.bashrc;
+fi
+
 # VERIFY TOOLS INSTALLATIONS
 docker -v &> /dev/null
 if [ $? -ne 0 ]; then
