@@ -34,7 +34,7 @@ done
 
 echo $@ > settings
 
-echo "${bold}NANO Node Docker ${version}${reset}"
+echo "${green}${bold}NANO Node Docker ${version}${reset}"
 
 # SET BASH ALIASES FOR NODE CLI
 if [ -f ~/.bash_aliases ]; then
@@ -143,11 +143,11 @@ fi
 # CHECK NODE INITIALIZATION
 [[ $quiet = 'false' ]] && printf "${yellow}Waiting for NANO node to fully initialize... "
 
-isRpcLive="$(curl -s -d '{"action": "version"}' 127.0.0.1:7076 | grep "rpc_version")"
+isRpcLive="$(curl -s -d '{"action": "version"}' [::1]:7076 | grep "rpc_version")"
 while [ ! -n "$isRpcLive" ];
 do
     sleep 1s
-    isRpcLive="$(curl -s -d '{"action": "version"}' 127.0.0.1:7076 | grep "rpc_version")"
+    isRpcLive="$(curl -s -d '{"action": "version"}' [::1]:7076 | grep "rpc_version")"
 done
 
 [[ $quiet = 'false' ]] && printf "${green}done.${reset}\n"
@@ -267,14 +267,13 @@ if [[ $quiet = 'false' ]]; then
     fi
     echo "${yellow}You can further configure and personalize your monitor by editing the config file located in ${green}nano-node-monitor/config.php${yellow}.${reset}"
 
-    if [[ $printImportInstructions = 'true'; ]] then
+    if [[ $printImportInstructions = 'true' ]]; then
         echo "${yellow} --------------------------------------------------------------------- ${reset}"
         echo "${yellow} ${bold}In order to import your existing wallet seed use the following command:${reset}"
         echo "${yellow} --------------------------------------------------------------------- ${reset}"
-        echo "${green} docker exec -it nano-node /usr/bin/rai_node --wallet_change_seed --wallet=${yellow}$walletId${green}--key=${yellow}<YOUR_SEED> ${reset}"
+        echo "${green} docker exec -it nano-node /usr/bin/rai_node --wallet_change_seed --wallet=${yellow}$walletId${green} --key=${yellow}<YOUR_SEED> ${reset}"
         echo "${yellow} --------------------------------------------------------------------- ${reset}"
         echo "${yellow}Afterwards, you will have to update your monitor with the correct NANO address (\$nanoNodeAccount) by editing the config file located in ${green}nano-node-monitor/config.php${yellow}.${reset}"
     fi
-]]
 
 fi
